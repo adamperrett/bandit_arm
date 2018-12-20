@@ -108,8 +108,8 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
     def get_synapse_id_by_target(self, target):
         return 0
 
-    BANDIT_REGION_BYTES = 24
-    ARMS_REGION_BYTES = 8
+    ARMS_REGION_BYTES = 24
+    DATA_REGION_BYTES = 8
     MAX_SIM_DURATION = 1000 * 60 * 60 * 24 * 7  # 1 week
 
     # parameters expected by PyNN
@@ -118,6 +118,7 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
         'constraints': None,
         'label': "Bandit_arm",
         'incoming_spike_buffer_size': None,
+        'duration': MAX_SIM_DURATION,
         'arm_id': 0,
         'no_arms': 3}
 
@@ -129,6 +130,7 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
                  no_arms=default_parameters['no_arms'],
                  constraints=default_parameters['constraints'],
                  label=default_parameters['label'],
+                 simulation_duration_ms=default_parameters['duration'],
                  incoming_spike_buffer_size=default_parameters['incoming_spike_buffer_size']
                  ):
         # **NOTE** n_neurons currently ignored - width and height will be
@@ -143,7 +145,10 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
 
         self._reward_delay = reward_delay
 
-        self._n_neurons = self._no_arms
+        self._n_neurons = numpy.ceil(numpy.log2(self._no_arms))
+
+        # used to define size of recording region
+        self._recording_size = int((simulation_duration_ms / 1000.) * 4)
 
 
         # Superclasses
@@ -183,7 +188,7 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
         # **HACK** only way to force no partitioning is to zero dtcm and cpu
         container = ResourceContainer(
             sdram=SDRAMResource(
-                self.BANDIT_REGION_BYTES +
+                self.ARMS_REGION_BYTES +
                 front_end_common_constants.SYSTEM_BYTES_REQUIREMENT),
             dtcm=DTCMResource(0),
             cpu_cycles=CPUCyclesPerTickResource(0))
@@ -226,40 +231,40 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
 
         # Reserve memory:
         spec.reserve_memory_region(
-            region=ArmMachineVertex._BANDIT_REGIONS.SYSTEM.value,
+            region=ArmMachineVertex._ARM_REGIONS.SYSTEM.value,
             size=front_end_common_constants.SYSTEM_BYTES_REQUIREMENT,
             label='setup')
         spec.reserve_memory_region(
-            region=ArmMachineVertex._BANDIT_REGIONS.BANDIT.value,
-            size=self.BANDIT_REGION_BYTES, label='ArmParams')
+            region=ArmMachineVertex._ARM_REGIONS.ARM.value,
+            size=self.ARMS_REGION_BYTES, label='ArmParams')
         # vertex.reserve_provenance_data_region(spec)
         # reserve recording region
         spec.reserve_memory_region(
-            ArmMachineVertex._BANDIT_REGIONS.RECORDING.value,
+            ArmMachineVertex._ARM_REGIONS.RECORDING.value,
             recording_utilities.get_recording_header_size(1))
         spec.reserve_memory_region(
-            region=ArmMachineVertex._BANDIT_REGIONS.ARMS.value,
-            size=self.ARMS_REGION_BYTES, label='ArmArms')
+            region=ArmMachineVertex._ARM_REGIONS.DATA.value,
+            size=self.DATA_REGION_BYTES, label='ArmArms')
 
         # Write setup region
         spec.comment("\nWriting setup region:\n")
         spec.switch_write_focus(
-            ArmMachineVertex._BANDIT_REGIONS.SYSTEM.value)
+            ArmMachineVertex._ARM_REGIONS.SYSTEM.value)
         spec.write_array(simulation_utilities.get_simulation_header_array(
             self.get_binary_file_name(), machine_time_step,
             time_scale_factor))
 
-        # Write bandit region containing routing key to transmit with
-        spec.comment("\nWriting bandit region:\n")
+        # Write arm region containing routing key to transmit with
+        spec.comment("\nWriting arm region:\n")
         spec.switch_write_focus(
-            ArmMachineVertex._BANDIT_REGIONS.BANDIT.value)
+            ArmMachineVertex._ARM_REGIONS.ARM.value)
         spec.write_value(routing_info.get_first_key_from_pre_vertex(
             vertex, constants.SPIKE_PARTITION_ID))
 
         # Write recording region for score
-        spec.comment("\nWriting bandit recording region:\n")
+        spec.comment("\nWriting arm recording region:\n")
         spec.switch_write_focus(
-            ArmMachineVertex._BANDIT_REGIONS.RECORDING.value)
+            ArmMachineVertex._ARM_REGIONS.RECORDING.value)
         ip_tags = tags.get_ip_tags_for_vertex(self) or []
         spec.write_array(recording_utilities.get_recording_header_array(
             [self._recording_size], ip_tags=ip_tags))
@@ -267,7 +272,7 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
         # Write probabilites for arms
         spec.comment("\nWriting arm probability region region:\n")
         spec.switch_write_focus(
-            ArmMachineVertex._BANDIT_REGIONS.ARMS.value)
+            ArmMachineVertex._ARM_REGIONS.DATA.value)
         ip_tags = tags.get_ip_tags_for_vertex(self) or []
         spec.write_value(self._arm_id, data_type=DataType.UINT32)
         spec.write_value(self._reward_delay, data_type=DataType.UINT32)
@@ -281,7 +286,7 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
     # ------------------------------------------------------------------------
     @overrides(AbstractHasAssociatedBinary.get_binary_file_name)
     def get_binary_file_name(self):
-        return "bandit.aplx"
+        return "arm.aplx"
 
     @overrides(AbstractHasAssociatedBinary.get_binary_start_type)
     def get_binary_start_type(self):
