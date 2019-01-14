@@ -99,19 +99,6 @@ uint32_t score_change_count=0;
 //----------------------------------------------------------------------------
 // Inline functions
 //----------------------------------------------------------------------------
-static inline void add_reward()
-{
-  spin1_send_mc_packet(key | (SPECIAL_EVENT_REWARD), 0, NO_PAYLOAD);
-  io_printf(IO_BUF, "Got a reward\n");
-  current_score++;
-}
-
-static inline void add_no_reward()
-{
-  spin1_send_mc_packet(key | (SPECIAL_EVENT_NO_REWARD), 0, NO_PAYLOAD);
-  io_printf(IO_BUF, "No reward\n");
-  current_score--;
-}
 
 static inline void pass_on_spike()
 {
@@ -182,13 +169,6 @@ static bool initialize(uint32_t *timer_period)
     address_t arms_region = data_specification_get_region(REGION_ARMS, address);
     arm_id = arms_region[0];
     reward_delay = arms_region[1];
-//    double arm_probabilities[10] = {0}
-//    for (int i=1, i<number_of_arms, i=i+1){
-//        io_printf(IO_BUF, "converting arm prob %d, stage \n", temp_arm_probabilities[i] i)
-//        arm_probabilities[i] = (double)temp_arm_probabilities[i] / 1000.0
-//        io_printf(IO_BUF, "probs after = %d\n", arm_probabilities)
-//    }
-//    srand(rand_seed);
     //TODO check this prints right, ybug read the address
     io_printf(IO_BUF, "reg id =  %d\nid = %d\n", (uint32_t *)arms_region[0], arm_id);
     io_printf(IO_BUF, "reward_delay = %d\n", reward_delay);

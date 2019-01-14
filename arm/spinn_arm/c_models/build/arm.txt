@@ -20,25 +20,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   2 ZI_DATA       000008e0  0040000c  0040000c  0002000c  2**2
                   ALLOC
-  3 .debug_info   000178e6  00000000  00000000  0002000c  2**0
+  3 .debug_info   000178e3  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000033fc  00000000  00000000  000378f2  2**0
+  4 .debug_abbrev 000033d3  00000000  00000000  000378ef  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_loc    00006593  00000000  00000000  0003acee  2**0
+  5 .debug_loc    00006593  00000000  00000000  0003acc2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_aranges 00000838  00000000  00000000  00041281  2**0
+  6 .debug_aranges 00000838  00000000  00000000  00041255  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_ranges 00000c18  00000000  00000000  00041ab9  2**0
+  7 .debug_ranges 00000c18  00000000  00000000  00041a8d  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00002bd6  00000000  00000000  000426d1  2**0
+  8 .debug_line   00002b89  00000000  00000000  000426a5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000032ac  00000000  00000000  000452a7  2**0
+  9 .debug_str    00003265  00000000  00000000  0004522e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .comment      0000006e  00000000  00000000  00048553  2**0
+ 10 .comment      0000006e  00000000  00000000  00048493  2**0
                   CONTENTS, READONLY
- 11 .ARM.attributes 00000029  00000000  00000000  000485c1  2**0
+ 11 .ARM.attributes 00000029  00000000  00000000  00048501  2**0
                   CONTENTS, READONLY
- 12 .debug_frame  0000178c  00000000  00000000  000485ec  2**2
+ 12 .debug_frame  0000178c  00000000  00000000  0004852c  2**2
                   CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 00000000 l    d  RO_DATA	00000000 RO_DATA
@@ -5660,7 +5660,7 @@ Disassembly of section RO_DATA:
     333c:	006d7261                                arm.
 
 00003340 <build_date>:
-    3340:	5c1bd152 251e7525 1e783830 251e6425     R..\%u.%08x.%d.%
+    3340:	5c3cc2c9 251e7525 1e783830 251e6425     ..<\%u.%08x.%d.%
     3350:	25000a64 64251e75 7525000a 3830251e     d..%u.%d..%u.%08
     3360:	30251e78 251e7838 0a783830 1e752500     x.%08x.%08x..%u.
     3370:	251e7525 30251e75 000a7838 251e7525     %u.%u.%08x..%u.%
