@@ -109,8 +109,8 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
         return 0
 
     ARMS_REGION_BYTES = 24
-    DATA_REGION_BYTES = 8
-    MAX_SIM_DURATION = 1000 * 60 * 60 * 24 * 7  # 1 week
+    DATA_REGION_BYTES = 28
+    MAX_SIM_DURATION = 1000 * 60 * 60 * 24  # 1 week
 
     # parameters expected by PyNN
     default_parameters = {
@@ -120,7 +120,9 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
         'incoming_spike_buffer_size': None,
         'duration': MAX_SIM_DURATION,
         'arm_id': 0,
-        'no_arms': 3}
+        'no_arms': 3,
+        'arm_prob': 1,
+        'random_seed': [1,2,3,4]}
 
     # **HACK** for Projection to connect a synapse type is required
     # synapse_type = ArmSynapseType()
@@ -128,6 +130,8 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
     def __init__(self, arm_id=default_parameters['arm_id'],
                  reward_delay=default_parameters['reward_delay'],
                  no_arms=default_parameters['no_arms'],
+                 arm_prob=default_parameters['arm_prob'],
+                 rand_seed=default_parameters['random_seed'],
                  constraints=default_parameters['constraints'],
                  label=default_parameters['label'],
                  simulation_duration_ms=default_parameters['duration'],
@@ -142,6 +146,9 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
         # Pass in variables
         self._arm_id = arm_id
         self._no_arms = no_arms
+        self._arm_prob = arm_prob*0xffffffff
+
+        self._rand_seed = rand_seed
 
         self._reward_delay = reward_delay
 
@@ -276,6 +283,11 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
         ip_tags = tags.get_ip_tags_for_vertex(self) or []
         spec.write_value(self._arm_id, data_type=DataType.UINT32)
         spec.write_value(self._reward_delay, data_type=DataType.UINT32)
+        spec.write_value(self._arm_prob, data_type=DataType.UINT32)
+        spec.write_value(self._rand_seed[0], data_type=DataType.UINT32)
+        spec.write_value(self._rand_seed[1], data_type=DataType.UINT32)
+        spec.write_value(self._rand_seed[2], data_type=DataType.UINT32)
+        spec.write_value(self._rand_seed[3], data_type=DataType.UINT32)
 
 
         # End-of-Spec:

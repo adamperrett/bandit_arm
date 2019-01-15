@@ -72,11 +72,13 @@ static uint32_t infinite_run;
 
 const int max_number_of_arms = 8;
 
-uint32_t *arm_probabilities;
-
 mars_kiss64_seed_t kiss_seed;
 
 int arm_id;
+
+uint32_t arm_prob;
+
+mars_kiss64_seed_t kiss_seed;
 
 int reward_delay;
 
@@ -103,7 +105,7 @@ uint32_t score_change_count=0;
 static inline void pass_on_spike()
 {
   spin1_send_mc_packet(key | (arm_id), 0, NO_PAYLOAD);
-  io_printf(IO_BUF, "passing packet from id %d\npacket = %d\tkey = %d\n", arm_id, key | (arm_id), key);
+//  io_printf(IO_BUF, "passing packet from id %d\npacket = %d\tkey = %d\n", arm_id, key | (arm_id), key);
   current_score++;
 }
 
@@ -169,6 +171,13 @@ static bool initialize(uint32_t *timer_period)
     address_t arms_region = data_specification_get_region(REGION_ARMS, address);
     arm_id = arms_region[0];
     reward_delay = arms_region[1];
+    arm_prob = arms_region[2];
+    kiss_seed[0] = arms_region[3];
+    kiss_seed[1] = arms_region[4];
+    kiss_seed[2] = arms_region[5];
+    kiss_seed[3] = arms_region[6];
+
+//    validate_mars_kiss64_seed(rand_seed);
     //TODO check this prints right, ybug read the address
     io_printf(IO_BUF, "reg id =  %d\nid = %d\n", (uint32_t *)arms_region[0], arm_id);
     io_printf(IO_BUF, "reward_delay = %d\n", reward_delay);
@@ -183,7 +192,12 @@ static bool initialize(uint32_t *timer_period)
 void mc_packet_received_callback(uint key, uint payload)
 {
     use(payload);
-    pass_on_spike();
+    uint32_t probability_roll;
+    probability_roll = mars_kiss64_seed(kiss_seed);
+//    io_printf(IO_BUF, "roll = %u, prob = %u\n", probability_roll, arm_prob);
+    if (probability_roll < arm_prob){
+        pass_on_spike();
+    }
 }
 //-------------------------------------------------------------------------------
 
