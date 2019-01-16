@@ -72,8 +72,6 @@ static uint32_t infinite_run;
 
 const int max_number_of_arms = 8;
 
-mars_kiss64_seed_t kiss_seed;
-
 int arm_id;
 
 uint32_t arm_prob;
