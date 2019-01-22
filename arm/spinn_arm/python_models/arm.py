@@ -81,7 +81,8 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
                AbstractProvidesOutgoingPartitionConstraints,
                AbstractAcceptsIncomingSynapses,
                AbstractNeuronRecordable,
-               SimplePopulationSettable
+               SimplePopulationSettable,
+               AbstractProvidesNKeysForPartition
                # AbstractBinaryUsesSimulationRun
                ):
 
@@ -114,7 +115,7 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
 
     @overrides(AbstractProvidesNKeysForPartition.get_n_keys_for_partition)
     def get_n_keys_for_partition(self, partition, graph_mapper):
-        return 4  # 2  # two for control IDs
+        return 8  # 2  # two for control IDs
 
     ARMS_REGION_BYTES = 24
     DATA_REGION_BYTES = 28

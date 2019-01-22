@@ -103,7 +103,7 @@ uint32_t score_change_count=0;
 static inline void pass_on_spike()
 {
   spin1_send_mc_packet(key | (arm_id), 0, NO_PAYLOAD);
-  io_printf(IO_BUF, "passing packet from id %d\npacket = %d\tkey = %d\n", arm_id, key | (arm_id), key);
+//  io_printf(IO_BUF, "passing packet from id %d\npacket = %d\tkey = %d\n", arm_id, key | (arm_id), key);
   current_score++;
 }
 
