@@ -19,7 +19,7 @@ from spinn_front_end_common.abstract_models.abstract_provides_n_keys_for_partiti
 # ----------------------------------------------------------------------------
 class ArmMachineVertex(MachineVertex):
     _ARM_REGIONS = Enum(
-        value="_BANDIT_REGIONS",
+        value="_ARM_REGIONS",
         names=[('SYSTEM', 0),
                ('ARM', 1),
                ('RECORDING', 2),

@@ -51,6 +51,10 @@ from spynnaker.pyNN.utilities import constants
 from spynnaker.pyNN.models.common.simple_population_settable \
     import SimplePopulationSettable
 
+from spinn_front_end_common.abstract_models\
+   .abstract_provides_n_keys_for_partition \
+   import AbstractProvidesNKeysForPartition
+
 # Arm imports
 from arm_machine_vertex import ArmMachineVertex
 
@@ -107,6 +111,10 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
     @overrides(AbstractAcceptsIncomingSynapses.get_synapse_id_by_target)
     def get_synapse_id_by_target(self, target):
         return 0
+
+    @overrides(AbstractProvidesNKeysForPartition.get_n_keys_for_partition)
+    def get_n_keys_for_partition(self, partition, graph_mapper):
+        return 4  # 2  # two for control IDs
 
     ARMS_REGION_BYTES = 24
     DATA_REGION_BYTES = 28

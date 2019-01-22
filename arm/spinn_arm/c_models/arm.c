@@ -37,9 +37,9 @@
 typedef enum
 {
   REGION_SYSTEM,
-  REGION_BREAKOUT,
+  REGION_ARM,
   REGION_RECORDING,
-  REGION_ARMS,
+  REGION_DATA,
 } region_t;
 
 typedef enum
@@ -103,7 +103,7 @@ uint32_t score_change_count=0;
 static inline void pass_on_spike()
 {
   spin1_send_mc_packet(key | (arm_id), 0, NO_PAYLOAD);
-//  io_printf(IO_BUF, "passing packet from id %d\npacket = %d\tkey = %d\n", arm_id, key | (arm_id), key);
+  io_printf(IO_BUF, "passing packet from id %d\npacket = %d\tkey = %d\n", arm_id, key | (arm_id), key);
   current_score++;
 }
 
@@ -150,7 +150,7 @@ static bool initialize(uint32_t *timer_period)
 
 
     // Read breakout region
-    address_t breakout_region = data_specification_get_region(REGION_BREAKOUT, address);
+    address_t breakout_region = data_specification_get_region(REGION_ARM, address);
     key = breakout_region[0];
     io_printf(IO_BUF, "\tKey=%08x\n", key);
     io_printf(IO_BUF, "\tTimer period=%d\n", *timer_period);
@@ -166,7 +166,7 @@ static bool initialize(uint32_t *timer_period)
        return false;
     }
 
-    address_t arms_region = data_specification_get_region(REGION_ARMS, address);
+    address_t arms_region = data_specification_get_region(REGION_DATA, address);
     arm_id = arms_region[0];
     reward_delay = arms_region[1];
     arm_prob = arms_region[2];
@@ -190,12 +190,12 @@ static bool initialize(uint32_t *timer_period)
 void mc_packet_received_callback(uint key, uint payload)
 {
     use(payload);
-    uint32_t probability_roll;
-    probability_roll = mars_kiss64_seed(kiss_seed);
+//    uint32_t probability_roll;
+//    probability_roll = mars_kiss64_seed(kiss_seed);
 //    io_printf(IO_BUF, "roll = %u, prob = %u\n", probability_roll, arm_prob);
-    if (probability_roll < arm_prob){
-        pass_on_spike();
-    }
+//    if (probability_roll < arm_prob){
+    pass_on_spike();
+//    }
 }
 //-------------------------------------------------------------------------------
 
