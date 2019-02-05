@@ -103,7 +103,7 @@ uint32_t score_change_count=0;
 static inline void pass_on_spike()
 {
   spin1_send_mc_packet(key | (arm_id), 0, NO_PAYLOAD);
-//  io_printf(IO_BUF, "passing packet from id %d\npacket = %d\tkey = %d\n", arm_id, key | (arm_id), key);
+//  io_printf(IO_BUF, "passing packet from id %u\npacket = %u\tkey = %u\n", arm_id, key | (arm_id), key);
   current_score++;
 }
 
@@ -187,9 +187,10 @@ static bool initialize(uint32_t *timer_period)
     return true;
 }
 
-void mc_packet_received_callback(uint key, uint payload)
+void mc_packet_received_callback(uint keyx, uint payload)
 {
     use(payload);
+//    io_printf(IO_BUF, "from = %u", keyx);
 //    uint32_t probability_roll;
 //    probability_roll = mars_kiss64_seed(kiss_seed);
 //    io_printf(IO_BUF, "roll = %u, prob = %u\n", probability_roll, arm_prob);

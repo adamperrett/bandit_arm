@@ -115,7 +115,7 @@ class Arm(ApplicationVertex, AbstractGeneratesDataSpecification,
 
     @overrides(AbstractProvidesNKeysForPartition.get_n_keys_for_partition)
     def get_n_keys_for_partition(self, partition, graph_mapper):
-        return 8  # 2  # two for control IDs
+        return self._no_arms
 
     ARMS_REGION_BYTES = 24
     DATA_REGION_BYTES = 28

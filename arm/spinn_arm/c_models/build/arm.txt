@@ -22,23 +22,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
   3 .debug_info   000178ca  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_abbrev 000033fc  00000000  00000000  000378d6  2**0
+  4 .debug_abbrev 000033ed  00000000  00000000  000378d6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_loc    00006593  00000000  00000000  0003acd2  2**0
+  5 .debug_loc    00006593  00000000  00000000  0003acc3  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_aranges 00000838  00000000  00000000  00041265  2**0
+  6 .debug_aranges 00000838  00000000  00000000  00041256  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_ranges 00000c00  00000000  00000000  00041a9d  2**0
+  7 .debug_ranges 00000c00  00000000  00000000  00041a8e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00002bd6  00000000  00000000  0004269d  2**0
+  8 .debug_line   00002bd6  00000000  00000000  0004268e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000329e  00000000  00000000  00045273  2**0
+  9 .debug_str    000032a3  00000000  00000000  00045264  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .comment      0000006e  00000000  00000000  00048511  2**0
+ 10 .comment      0000006e  00000000  00000000  00048507  2**0
                   CONTENTS, READONLY
- 11 .ARM.attributes 00000029  00000000  00000000  0004857f  2**0
+ 11 .ARM.attributes 00000029  00000000  00000000  00048575  2**0
                   CONTENTS, READONLY
- 12 .debug_frame  00001784  00000000  00000000  000485a8  2**2
+ 12 .debug_frame  00001784  00000000  00000000  000485a0  2**2
                   CONTENTS, READONLY, DEBUGGING
 SYMBOL TABLE:
 00000000 l    d  RO_DATA	00000000 RO_DATA
@@ -5652,7 +5652,7 @@ Disassembly of section RO_DATA:
     331c:	006d7261                                arm.
 
 00003320 <build_date>:
-    3320:	5c4719f3 251e7525 1e783830 251e6425     ..G\%u.%08x.%d.%
+    3320:	5c59e57c 251e7525 1e783830 251e6425     |.Y\%u.%08x.%d.%
     3330:	25000a64 64251e75 7525000a 3830251e     d..%u.%d..%u.%08
     3340:	30251e78 251e7838 0a783830 1e752500     x.%08x.%08x..%u.
     3350:	251e7525 30251e75 000a7838 251e7525     %u.%u.%08x..%u.%
